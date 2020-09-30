@@ -17,67 +17,73 @@ import com.sun.net.httpserver.HttpServer;
 
 public class JavaHTTPServer {
 	
-	private static final String apiKey = "";
+	private static final String apiKey = "c15ea3a35f926cc6a0c495e2bc019543e49f9d2f41019adc0f3fbb6909bddfa6";
+	private static final String client_id = "e32a44e8f4f09361a9a73586e3811c1a";
+	public static final JSONObject json = null;
 
 	   public static void main(String[] args) throws Exception {
 
 		  
-		   HttpServer server  = HttpServer.create(new InetSocketAddress("localhost", 8002), 0);
+		   HttpServer server  = HttpServer.create(new InetSocketAddress("localhost", 8003), 0);
 	        server.createContext("/test", new MyHandler());
 	        server.setExecutor(null); // creates a default executor
 	        server.start();
+	       
+	       
 	    }
 
 	    static class MyHandler implements HttpHandler {
-	        public void handle(HttpExchange t) throws IOException {
-	            String response = "This is the response";
-	            t.sendResponseHeaders(200, response.length());
+	        
+			public void handle(HttpExchange t) throws IOException {
+				t.getResponseHeaders().set("Content-Type", "text/plain");
+		          
+				String response = "Hello API Event Received";
+	            
 	            OutputStream os = t.getResponseBody();
 	            os.write(response.getBytes());
 	            os.close();
-	        }
-	        
-	        
-	     
-	       
+	         
 
-	        JSONObject json = null;
+	       
 	  
-	     try {   
-            Event event = new Event(json);
+	 
+			
+		        
+            Event event = null;
+			try {
+				event = new Event(json);
+			} catch (HelloSignException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
      
             
-            if (event.isValid(apiKey)) {
-            	System.out.print("Event received:");
-                if (event.hasAccountId()) {
-                	System.out.print("\tAccount ID: " + event.getAccountId());
-                }
-                DateFormat dateformat = DateFormat.getDateTimeInstance();
-                dateformat.setTimeZone(TimeZone.getTimeZone("US/Pacific"));
-                System.out.print("\tDate: " + dateformat.format(event.getEventDate()));
-                System.out.print("\tType: " + event.getType());
-                if (event.hasSignatureRequest()) {
-                	System.out.print("\tSignature Request: " + event.getSignatureRequest().getId());
-                }
-                if (event.hasRelatedSignatureId()) {
-                    System.out.print("\tSignature ID: " + event.getRelatedSignatureId());
-                }
-            }
-         }catch  (HelloSignException ex) {
-                ex.printStackTrace();
-            
-            }
-            
-
-        // Respond to HelloSign with an HTTP 200 and valid message
- 
-
-        response.setContentType("text/plain");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println("Hello API Event Received");
-    }
-	}
-
+            try {
+				if (event.isValid(apiKey)) {
+					System.out.print("Event received:");
+				    if (event.hasAccountId()) {
+				    	System.out.print("\tAccount ID: " + event.getAccountId());
+				    }
+				    DateFormat dateformat = DateFormat.getDateTimeInstance();
+				    dateformat.setTimeZone(TimeZone.getTimeZone("US/Pacific"));
+				    System.out.print("\tDate: " + dateformat.format(event.getEventDate()));
+				    System.out.print("\tType: " + event.getType());
+				    if (event.hasSignatureRequest()) {
+				    	System.out.print("\tSignature Request: " + event.getSignatureRequest().getId());
+				    }
+				    if (event.hasRelatedSignatureId()) {
+				        System.out.print("\tSignature ID: " + event.getRelatedSignatureId());
+				    }
+				}
+			}catch (HelloSignException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+        
+	    }
+	  
+	  }
+   
 }
 
 	   
