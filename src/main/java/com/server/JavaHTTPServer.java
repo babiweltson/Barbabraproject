@@ -25,61 +25,63 @@ public class JavaHTTPServer {
 
 		  
 		   HttpServer server  = HttpServer.create(new InetSocketAddress("localhost", 8003), 0);
-	        server.createContext("/test", new MyHandler());
-	        server.setExecutor(null); // creates a default executor
+	        server.createContext("/", new MyHandler());
 	        server.start();
-	       
+	        //server.stop(0);
+	        //httpThreadPool.shutdown(); 
 	       
 	    }
 
 	    static class MyHandler implements HttpHandler {
 	        
 			public void handle(HttpExchange t) throws IOException {
-				t.getResponseHeaders().set("Content-Type", "text/plain");
-		          
-				String response = "Hello API Event Received";
-	            
-	            OutputStream os = t.getResponseBody();
-	            os.write(response.getBytes());
-	            os.close();
+				
+		         t.getResponseHeaders().set("Content-Type", "text/plain");
+		         String response = "Hello API Event Received";
+		         t.sendResponseHeaders(200, response.length());
+		         OutputStream os = t.getResponseBody();
+		         os.write(response.getBytes());
+		         os.flush();
+		         os.close();
 	         
 
 	       
 	  
 	 
-			
-		        
-            Event event = null;
-			try {
-				event = new Event(json);
-			} catch (HelloSignException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-     
-            
-            try {
-				if (event.isValid(apiKey)) {
-					System.out.print("Event received:");
-				    if (event.hasAccountId()) {
-				    	System.out.print("\tAccount ID: " + event.getAccountId());
-				    }
-				    DateFormat dateformat = DateFormat.getDateTimeInstance();
-				    dateformat.setTimeZone(TimeZone.getTimeZone("US/Pacific"));
-				    System.out.print("\tDate: " + dateformat.format(event.getEventDate()));
-				    System.out.print("\tType: " + event.getType());
-				    if (event.hasSignatureRequest()) {
-				    	System.out.print("\tSignature Request: " + event.getSignatureRequest().getId());
-				    }
-				    if (event.hasRelatedSignatureId()) {
-				        System.out.print("\tSignature ID: " + event.getRelatedSignatureId());
-				    }
-				}
-			}catch (HelloSignException e) {
-				// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-        
+//			
+//		        
+//            Event event = null;
+//			try {
+//				event = new Event(json);
+//			} catch (HelloSignException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//				
+//			}
+//     
+//            
+//            try {
+//				if (event.isValid(apiKey)) {
+//					System.out.print("Event received:");
+//				    if (event.hasAccountId()) {
+//				    	System.out.print("\tAccount ID: " + event.getAccountId());
+//				    }
+//				    DateFormat dateformat = DateFormat.getDateTimeInstance();
+//				    dateformat.setTimeZone(TimeZone.getTimeZone("US/Pacific"));
+//				    System.out.print("\tDate: " + dateformat.format(event.getEventDate()));
+//				    System.out.print("\tType: " + event.getType());
+//				    if (event.hasSignatureRequest()) {
+//				    	System.out.print("\tSignature Request: " + event.getSignatureRequest().getId());
+//				    }
+//				    if (event.hasRelatedSignatureId()) {
+//				        System.out.print("\tSignature ID: " + event.getRelatedSignatureId());
+//				    }
+//				}
+//			}catch (HelloSignException e) {
+//				// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			}
+//        
 	    }
 	  
 	  }
