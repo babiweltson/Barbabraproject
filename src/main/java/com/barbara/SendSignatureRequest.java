@@ -23,6 +23,7 @@ public class SendSignatureRequest {
 		doc2.setFile(new File("/Users/bweltson/Documents/Basic-Non-Disclosure-Agreement.pdf"));
 		request.setIsDeclinable(false);
 		request.setRedirectUrl("https://www.google.com/");
+		request.setTestMode(true);
 		
 		
 		FormField textField = new FormField();
@@ -58,7 +59,7 @@ public class SendSignatureRequest {
 		request.addDocument(doc1);
 		request.addDocument(doc2);
 
-		HelloSignClient client = new HelloSignClient("c15ea3a35f926cc6a0c495e2bc019543e49f9d2f41019adc0f3fbb6909bddfa6");
+		HelloSignClient client = new HelloSignClient("cf0f007c813bd2c9ccdd2fa0499f9578bc05e84815ed92339a0d3b1b593c6c4a");
 		SignatureRequest newRequest = client.sendSignatureRequest(request);
 		
 	}
