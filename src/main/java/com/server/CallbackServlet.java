@@ -54,33 +54,27 @@ public class CallbackServlet extends HttpServlet {
         }
     	
         
+        		        		
      
     	
+       
+//            
+//            for(CustomField field : event.getSignatureRequest().getCustomFields()) {
+//            	if (field.getName().equalsIgnoreCase("Percentage")){
+//            		System.out.println(field.getValue());
+//            	}
+//            	
+//            }
+           
+            
         try {
-            Event event = new Event(json);
-            
-            for(CustomField field : event.getSignatureRequest().getCustomFields()) {
-            	if (field.getName().equalsIgnoreCase("Percentage")){
-            		System.out.println(field.getValue());
-            	}
-            	
-            }
-            
-            for (int index=0;i< json.length();i++) {
-            	System.out.println(json.getJSONArray("created_at"));
-            	
-            }
-            	
-            	
-            
-            
-            //json.
-            
-            System.out.println(event.toString());
+            Event event = new Event(json);      
+          
             if (event.isValid("c15ea3a35f926cc6a0c495e2bc019543e49f9d2f41019adc0f3fbb6909bddfa6")) {
                 System.out.println("Event received:");
                 if (event.hasAccountId()) {
                     System.out.println("\tAccount ID: " + event.getAccountId());
+                   
                 }
                 DateFormat dateformat = DateFormat.getDateTimeInstance();
                 dateformat.setTimeZone(TimeZone.getTimeZone("US/Pacific"));
@@ -88,6 +82,11 @@ public class CallbackServlet extends HttpServlet {
                 System.out.println("\tType: " + event.getType());
                 if (event.hasSignatureRequest()) {
                     System.out.println("\tSignature Request: " + event.getSignatureRequest().getId());
+                    String created_at = json.getJSONObject("signature_request_id").getString("created_at");
+                    //for (int index = 0; index < created_at.length() ; i++){
+                		System.out.println("Created at" + created_at);
+                		
+                	//}
                     
                 }
                 if (event.hasRelatedSignatureId()) {
